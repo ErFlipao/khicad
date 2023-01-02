@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# Ctrl + L
+tput -x clear
+# Import dotenv
+set -a; source .env; set +a
+
+# Define show and hide cursor functions
+show_cursor() {
+	tput cnorm
+	exit
+}
+
+hide_cursor(){
+	tput civis
+}
+
+# Promp the user to get all necessary values for the script
+printf "$(tput bold)Enter album url: $(tput sgr0)"
+read albumurl
+# Extract urls of the songs in the album
+urls=$(curl -s "$albumurl" | grep -oiE "/game-soundtracks/album/.*.mp3" | uniq)
+status=$?
+if [ "${urls[0]}" == "" ]; then
+	echo "$(tput bold)$(tput setaf 1)Invalid url$(tput sgr0)"
+fi
+
+printf "$(tput bold)Enter album name: $(tput sgr0)"
+read albumname
+
+# Get total size and ask for song format
+infosizemp3=$(curl -s "$albumurl" | grep -o "Total.Filesize:.*</b>" | cut -d\> -f2 | cut -d\< -f1 )
+infosizeflac=$(curl -s "$albumurl" | grep -o "Total.Filesize:.*</b>" | cut -d\> -f4 | cut -d\< -f1 )
+PS3="$(tput bold)Choose file format: $(tput sgr0)"
+options=("$(tput setaf 4)mp3 ($infosizemp3)$(tput sgr0)" "$(tput setaf 4)flac ($infosizeflac)$(tput sgr0)")
+select opt in "${options[@]}"
+
+do
+	case $opt in
+		"${options[0]}")
+			format="mp3"
+			;;
+		"${options[1]}")
+			format="flac"
+			;;
+		*) 
+			echo "$(tput bold)$(tput setaf 3)Invalid Option, defaulting to mp3$(tput sgr0)"
+			format="mp3";;
+	esac
+	break
+done
+
+# Hide cursor and set up TERM catch
+trap show_cursor INT TERM
+hide_cursor
+
+# Create the folder for the songs
+albumdir="$ROOT_DOWNLOAD_DIR$albumname"
+mkdir -p "$albumdir"
+
+# Loop over the songs and download the files
+counter=$(expr 1 - 1)
+totalsongs=$(echo "$urls" | wc -l)
+for url in $urls;
+do
+	counter=$(expr $counter + 1)
+	
+	if test 10 -gt $counter
+	then
+		songnumber="0$counter"
+	else
+		songnumber=$counter
+	fi
+	
+	songname="$songnumber $(curl -s "https://downloads.khinsider.com$url" | grep -o "Song.name:.<b>.*</b>" | cut -d\< -f2 | cut -d\> -f2).$format"
+	
+	progress="$counter/$totalsongs"
+	echo -ne "$(tput setaf 2)$(tput bold)$progress$(tput sgr0) | $(tput setaf 2)Downloading song: $songname$(tput sgr0)\033[0K\r"
+
+	songlink=$(curl -s "https://downloads.khinsider.com$url" | grep -o "https://vgmsite.com/soundtracks/.*.$format" | uniq)
+	curl "$songlink" --output-dir "$albumdir" --output "$songname" --silent
+done
+
+echo "DONE"
+echo "Songs saved in $albumdir"
+# Restore cursor
+show_cursor
