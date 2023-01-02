@@ -3,7 +3,7 @@
 # Ctrl + L
 tput -x clear
 # Import dotenv
-set -a; source .env; set +a
+set -a; source "$(dirname "$0")/".env; set +a
 
 # Define show and hide cursor functions
 show_cursor() {
