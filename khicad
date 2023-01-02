@@ -59,11 +59,11 @@ albumdir="$ROOT_DOWNLOAD_DIR$albumname"
 mkdir -p "$albumdir"
 
 # Loop over the songs and download the files
-counter=$(expr 1 - 1)
+counter=0
 totalsongs=$(echo "$urls" | wc -l)
 for url in $urls;
 do
-	counter=$(expr $counter + 1)
+	counter=$((counter+1))
 	
 	if test 10 -gt $counter
 	then
@@ -81,6 +81,7 @@ do
 	curl "$songlink" --output-dir "$albumdir" --output "$songname" --silent
 done
 
+echo ""
 echo "DONE"
 echo "Songs saved in $albumdir"
 # Restore cursor
