@@ -37,7 +37,7 @@ hide_cursor(){
 }
 
 # Read supplied arguments
-while getopts ":h":u:n:f: option; do
+while getopts ":h"u:n:f: option; do
    case $option in
     h)
 	  Help
