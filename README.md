@@ -15,7 +15,7 @@ Make the file executable with
 
  **`chmod +x ./khicad`**
 
-Execute the script using the `-u` flag for the full url of the album you want to download hosted on [KHInsider](https://downloads.khinsider.com/), the `-n` flag for the Album name, which will be the folder in the `albumdir`, and the `-f` flag for the song format.
+Execute the script using the `-u` flag for the full url of the album you want to download hosted on [KHInsider](https://downloads.khinsider.com/), the `-n` flag for the Album name, which will be the name of the folder created in `ROOT_DOWNLOAD_DIR`, and the `-f` flag for the song format.
 
 And you are good to go, enjoy!
 
