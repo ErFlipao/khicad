@@ -1,5 +1,28 @@
 #!/bin/bash
 
+################################################################################
+# Help                                                                         #
+################################################################################
+Help()
+{
+   # Display Help
+   echo 'Simple script for the purpose of downloading all songs of an album in KHInsider without the need of an account or permission to the "Download all songs at once" feature.'
+   echo
+   echo "Syntax: khicad [-h | options]"
+   echo "options:"
+   echo "h     Print this Help"
+   echo "u	   Url of the album to download"
+   echo "n     Name of the folder to which the songs will be downloaded to (This folder does not need to exists prior to execution)"
+   echo "f     Format of the songs (mp3, flac, m4a, etc.)"
+   echo
+}
+
+################################################################################
+################################################################################
+# Main program                                                                 #
+################################################################################
+################################################################################
+
 # Import dotenv
 set -a; source "$(dirname "$0")/".env; set +a
 
@@ -14,8 +37,11 @@ hide_cursor(){
 }
 
 # Read supplied arguments
-while getopts u:n:f: option; do
+while getopts ":h":u:n:f: option; do
    case $option in
+    h)
+	  Help
+	  exit;;
     u)
       albumurl=${OPTARG};;
     n)
@@ -23,14 +49,14 @@ while getopts u:n:f: option; do
     f)
       format=${OPTARG};;
     ?)
-      echo "script usage: khicad [-u album_url] [-n album_name] [-f file_format]" >&2
+      echo "script usage: khicad [-h | [-u album_url] [-n album_name] [-f file_format]]" >&2
       exit 1
       ;;
   esac
 done
 
 if [ -z "${albumurl+x}" ] || [ -z "${albumname+x}" ] || [ -z "${format+x}" ]; then
-      echo "script usage: khicad [-u album_url] [-n album_name] [-f file_format]" >&2
+      echo "script usage: khicad [-h | [-u album_url] [-n album_name] [-f file_format]]" >&2
       exit 1
 fi
 
@@ -71,7 +97,7 @@ do
 	curl "$songlink" --output-dir "$albumdir" --output "$songname" --silent
 done
 
-echo ""
+echo
 echo "DONE"
 echo "Songs saved in $albumdir"
 # Restore cursor
