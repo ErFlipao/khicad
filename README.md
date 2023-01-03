@@ -27,5 +27,4 @@ And you are good to go, enjoy!
 
 ```
 - Propperly identify total album size for selected format
-- Summary and -y flag to ignore confirmation
 ```
