@@ -36,7 +36,6 @@ fi
 
 # Extract urls of the songs in the album
 urls=$(curl -s "$albumurl" | grep -oiE "/game-soundtracks/album/.*.mp3" | uniq | xargs -I{} echo "https://downloads.khinsider.com{}")
-status=$?
 if [ "${urls[0]}" == "" ]; then
 	echo "$(tput bold)$(tput setaf 1)Invalid url$(tput sgr0)" >&2
 	exit 1
