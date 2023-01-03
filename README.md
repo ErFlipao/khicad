@@ -10,7 +10,7 @@ Make the file executable with
 
  **`chmod +x ./khicad`**
 
-Execute the script and enter the full url of the album you want to download hosted on [KHInsider](https://downloads.khinsider.com/), the Album name, which will be the folder in the `albumdir`, and select the song format `(mp3/flac)`
+Execute the script using the `-u` flag for the full url of the album you want to download hosted on [KHInsider](https://downloads.khinsider.com/), the `-n` flag for the Album name, which will be the folder in the `albumdir`, and the `-f` flag for the song format.
 
 And you are good to go, enjoy!
 
@@ -20,4 +20,7 @@ And you are good to go, enjoy!
 
 # Missing Features
 
-File types offered automatic detection. It curently works with mp3 and flac, but it won't tell you if those formats are available. If there are two formats and the latter is WAV, the script will tell detect it as flac when choosing file format but will not download since the extension is not flac.
+```
+- Propperly identify total album size for selected format
+- Summary and -y flag to ignore confirmation
+```
