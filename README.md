@@ -9,7 +9,7 @@ It also gives normalized names to the songs in the form of "XX Name of song.form
 ```
 
 ## Usage
-Clone the repository in your desired location, create a dotenv file and set the `ROOT_DOWNLOAD_DIR` variable to the desired root directory for your downloads
+Clone the repository in your desired location, create a dotenv file and set the `ROOT_DOWNLOAD_DIR` variable to the desired root directory for your downloads. Make sure to include the trailing slash.
 
 Make the file executable with
 
